@@ -1,0 +1,32 @@
+version: '3'
+services:
+  flask-app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - misp
+    environment:
+      - FLASK_ENV=development
+    networks:
+      - misp-network
+
+  misp:
+    image: wmhchallenge/misp
+    ports:
+      - "443:443"
+    environment:
+      - MISP_ADMIN_EMAIL=admin@example.com
+      - MISP_ADMIN_PASSPHRASE=admin
+    volumes:
+      - misp_data:/var/www/MISP
+    networks:
+      - misp-network
+
+volumes:
+  misp_data:
+
+networks:
+  misp-network:
